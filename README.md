@@ -9,13 +9,13 @@ Assistente Inteligente da Energisa especializada em atendimento técnico de falt
         ↓
 [LiveKit WebRTC]
         ↓
-[Backend Node.js]
+[Backend Python + FastAPI]
         ↓
 [Deepgram Nova 3 - STT]
         ↓
-[Google Gemini 2.5 Flash - LLM]
+[Google Gemini 2.0 Flash - LLM]
         ↓
-[ElevenLabs TTS]
+[ElevenLabs Turbo v2.5 - TTS]
         ↓
 [LiveKit WebRTC]
         ↓
@@ -25,12 +25,13 @@ Assistente Inteligente da Energisa especializada em atendimento técnico de falt
 ## 🚀 Tecnologias
 
 ### Backend
-- **Node.js** + **TypeScript**
+- **Python 3.10+** - Linguagem principal
+- **FastAPI** - Framework web assíncrono moderno
+- **Uvicorn** - ASGI server de alta performance
 - **LiveKit** - WebRTC para áudio em tempo real
 - **Deepgram Nova 3** - Speech-to-Text (STT)
-- **Google Gemini 2.5 Flash Lite** - Large Language Model (LLM)
-- **ElevenLabs** - Text-to-Speech (TTS)
-- **Express** - API REST
+- **Google Gemini 2.0 Flash** - Large Language Model (LLM)
+- **ElevenLabs Turbo v2.5** - Text-to-Speech (TTS)
 
 ### Frontend
 - **React** + **TypeScript**
@@ -40,13 +41,19 @@ Assistente Inteligente da Energisa especializada em atendimento técnico de falt
 
 ## 📋 Pré-requisitos
 
-### 1. Node.js
+### 1. Python
+```bash
+python --version  # 3.10 ou superior
+pip --version     # 23.0 ou superior
+```
+
+### 2. Node.js (apenas para frontend)
 ```bash
 node --version  # v18.0.0 ou superior
 npm --version   # v9.0.0 ou superior
 ```
 
-### 2. LiveKit Server
+### 3. LiveKit Server
 
 #### Opção A: Docker (Recomendado)
 ```bash
@@ -63,7 +70,7 @@ docker run -d \
 #### Opção B: Download Binário
 Baixe em: https://github.com/livekit/livekit/releases
 
-### 3. Chaves de API
+### 4. Chaves de API
 
 Você precisará de contas e chaves API para:
 
@@ -125,41 +132,65 @@ keys:
 **Importante**: Use a mesma `api_key` e `api_secret` que você colocou no arquivo `.env`.
 
 ### 4. Instale as dependências
+
+#### Backend (Python)
 ```bash
+cd backend
+pip install -r requirements.txt
+```
+
+Ou com Poetry (recomendado):
+```bash
+cd backend
+poetry install
+```
+
+#### Frontend (React)
+```bash
+cd frontend
 npm install
 ```
 
-Isso instalará as dependências de ambos os workspaces (backend e frontend).
-
 ## 🎮 Como Executar
 
-### Desenvolvimento (Backend + Frontend)
+### Backend (Python)
 ```bash
+cd backend
+python -m src.main
+```
+
+Ou com Uvicorn:
+```bash
+cd backend
+uvicorn src.main:app --reload --port 3000
+```
+
+### Frontend (React)
+```bash
+cd frontend
 npm run dev
 ```
 
-Isso iniciará:
-- Backend na porta `3000`
-- Frontend na porta `5173`
-
-### Apenas Backend
+### Em terminais separados
+Terminal 1 (Backend):
 ```bash
-npm run dev:backend
+cd backend && python -m src.main
 ```
 
-### Apenas Frontend
+Terminal 2 (Frontend):
 ```bash
-npm run dev:frontend
+cd frontend && npm run dev
 ```
 
 ## 📱 Como Usar
 
 1. Certifique-se de que o LiveKit Server está rodando
-2. Execute o projeto com `npm run dev`
-3. Abra o navegador em `http://localhost:5173`
-4. Clique em **"Iniciar Conversa"**
-5. Permita o acesso ao microfone
-6. Comece a falar com a GISA!
+2. Execute o backend Python: `cd backend && python -m src.main`
+3. Execute o frontend React: `cd frontend && npm run dev`
+4. Abra o navegador em `http://localhost:5173`
+5. Clique em **"Iniciar Conversa"**
+6. Permita o acesso ao microfone
+7. Comece a falar com a GISA!
 
 ## 🎯 Fluxo da Conversa
 
@@ -185,17 +216,17 @@ energisa-demo/
 ├── backend/
 │   ├── src/
 │   │   ├── agent/
-│   │   │   ├── gisaPrompt.ts      # Prompt da GISA
-│   │   │   └── voiceAgent.ts      # Lógica do agente
+│   │   │   ├── gisa_prompt.py     # Prompt da GISA
+│   │   │   └── voice_agent.py     # Lógica do agente
 │   │   ├── services/
-│   │   │   ├── deepgram.ts        # Integração Deepgram
-│   │   │   ├── elevenlabs.ts      # Integração ElevenLabs
-│   │   │   └── gemini.ts          # Integração Gemini
-│   │   ├── config.ts              # Configurações
-│   │   ├── types.ts               # Tipos TypeScript
-│   │   └── index.ts               # Servidor principal
-│   ├── package.json
-│   └── tsconfig.json
+│   │   │   ├── deepgram.py        # Integração Deepgram
+│   │   │   ├── elevenlabs.py      # Integração ElevenLabs
+│   │   │   └── gemini.py          # Integração Gemini
+│   │   ├── config.py              # Configurações
+│   │   ├── models.py              # Modelos Pydantic
+│   │   └── main.py                # FastAPI app
+│   ├── requirements.txt
+│   └── pyproject.toml
 ├── frontend/
 │   ├── src/
 │   │   ├── App.tsx                # Componente principal
@@ -207,7 +238,7 @@ energisa-demo/
 │   └── vite.config.ts
 ├── .env.example
 ├── .gitignore
-├── package.json
+├── livekit.yaml
 └── README.md
 ```
 
@@ -252,7 +283,7 @@ Para mudar a voz:
 
 ### Prompt do Agente
 
-Edite o arquivo `backend/src/agent/gisaPrompt.ts` para customizar:
+Edite o arquivo `backend/src/agent/gisa_prompt.py` para customizar:
 - Personalidade da GISA
 - Cenários de atendimento
 - Frases padrão
@@ -291,7 +322,7 @@ Edite `frontend/src/index.css` para customizar:
 ### Logs do Backend
 ```bash
 cd backend
-npm run dev
+python -m src.main
 ```
 
 Logs disponíveis:
@@ -312,8 +343,13 @@ Abra o DevTools do navegador (F12) e veja:
 ### Backend
 ```bash
 cd backend
-npm run build
-npm start
+uvicorn src.main:app --host 0.0.0.0 --port 3000
+```
+
+Ou com Gunicorn:
+```bash
+cd backend
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main:app
 ```
 
 ### Frontend
