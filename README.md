@@ -1,15 +1,17 @@
-# 🎙️ GISA - Agente de Voz em Tempo Real
+# 🐍 GISA - Agente de Voz em Tempo Real (100% Python)
 
 Assistente Inteligente da Energisa especializada em atendimento técnico de falta de energia elétrica.
+
+**🎯 Projeto completamente em Python - Backend FastAPI + Frontend Gradio**
 
 ## 🏗️ Arquitetura
 
 ```
 [Microfone do Usuário]
         ↓
-[LiveKit WebRTC]
+[Interface Gradio (Python)]
         ↓
-[Backend Python + FastAPI]
+[Backend FastAPI (Python)]
         ↓
 [Deepgram Nova 3 - STT]
         ↓
@@ -17,27 +19,26 @@ Assistente Inteligente da Energisa especializada em atendimento técnico de falt
         ↓
 [ElevenLabs Turbo v2.5 - TTS]
         ↓
-[LiveKit WebRTC]
+[Interface Gradio (Python)]
         ↓
 [Fone do Usuário]
 ```
 
-## 🚀 Tecnologias
+## 🚀 Tecnologias (100% Python!)
 
 ### Backend
 - **Python 3.10+** - Linguagem principal
 - **FastAPI** - Framework web assíncrono moderno
 - **Uvicorn** - ASGI server de alta performance
-- **LiveKit** - WebRTC para áudio em tempo real
 - **Deepgram Nova 3** - Speech-to-Text (STT)
 - **Google Gemini 2.0 Flash** - Large Language Model (LLM)
 - **ElevenLabs Turbo v2.5** - Text-to-Speech (TTS)
+- **Pydantic** - Validação de dados
 
 ### Frontend
-- **React** + **TypeScript**
-- **Vite** - Build tool
-- **LiveKit Client SDK** - WebRTC client
-- **CSS moderno** - Interface responsiva
+- **Gradio 4.16** - Interface web interativa (100% Python!)
+- **Numpy** - Processamento de áudio
+- **SoundFile** - Manipulação de arquivos de áudio
 
 ## 📋 Pré-requisitos
 
@@ -47,30 +48,7 @@ python --version  # 3.10 ou superior
 pip --version     # 23.0 ou superior
 ```
 
-### 2. Node.js (apenas para frontend)
-```bash
-node --version  # v18.0.0 ou superior
-npm --version   # v9.0.0 ou superior
-```
-
-### 3. LiveKit Server
-
-#### Opção A: Docker (Recomendado)
-```bash
-docker run -d \
-  --name livekit \
-  -p 7880:7880 \
-  -p 7881:7881 \
-  -p 7882:7882/udp \
-  -v $PWD/livekit.yaml:/livekit.yaml \
-  livekit/livekit-server \
-  --config /livekit.yaml
-```
-
-#### Opção B: Download Binário
-Baixe em: https://github.com/livekit/livekit/releases
-
-### 4. Chaves de API
+### 2. Chaves de API
 
 Você precisará de contas e chaves API para:
 
@@ -94,11 +72,6 @@ cp .env.example .env
 Edite o arquivo `.env` com suas credenciais:
 
 ```env
-# LiveKit Configuration
-LIVEKIT_URL=ws://localhost:7880
-LIVEKIT_API_KEY=sua_api_key_aqui
-LIVEKIT_API_SECRET=seu_api_secret_aqui
-
 # Deepgram Configuration (STT)
 DEEPGRAM_API_KEY=sua_deepgram_api_key_aqui
 
@@ -111,86 +84,73 @@ ELEVENLABS_VOICE_ID=seu_voice_id_aqui
 
 # Server Configuration
 PORT=3000
+HOST=0.0.0.0
 NODE_ENV=development
 ```
 
-### 3. Configure o LiveKit Server
+### 3. Instale as dependências
 
-Crie o arquivo `livekit.yaml`:
-
-```yaml
-port: 7880
-rtc:
-  port_range_start: 50000
-  port_range_end: 60000
-  use_external_ip: false
-
-keys:
-  your_api_key: your_api_secret
-```
-
-**Importante**: Use a mesma `api_key` e `api_secret` que você colocou no arquivo `.env`.
-
-### 4. Instale as dependências
-
-#### Backend (Python)
+#### Com pip (recomendado para começar)
 ```bash
-cd backend
 pip install -r requirements.txt
 ```
 
-Ou com Poetry (recomendado):
+#### Com Poetry (recomendado para produção)
 ```bash
-cd backend
 poetry install
-```
-
-#### Frontend (React)
-```bash
-cd frontend
-npm install
 ```
 
 ## 🎮 Como Executar
 
-### Backend (Python)
+### Opção 1: Executar Tudo de Uma Vez (Simples!)
+
 ```bash
+# Terminal 1: Backend
 cd backend
 python -m src.main
+
+# Terminal 2: Frontend Gradio
+python app.py
 ```
 
-Ou com Uvicorn:
+### Opção 2: Com Poetry
+
 ```bash
+# Terminal 1: Backend
 cd backend
-uvicorn src.main:app --reload --port 3000
+poetry run python -m src.main
+
+# Terminal 2: Frontend
+poetry run python app.py
 ```
 
-### Frontend (React)
-```bash
-cd frontend
-npm run dev
-```
+### Acessar a aplicação
 
-### Em terminais separados
-Terminal 1 (Backend):
-```bash
-cd backend && python -m src.main
-```
-
-Terminal 2 (Frontend):
-```bash
-cd frontend && npm run dev
-```
+- **Frontend Gradio**: http://localhost:7860
+- **Backend API**: http://localhost:3000
+- **Docs da API**: http://localhost:3000/docs
 
 ## 📱 Como Usar
 
-1. Certifique-se de que o LiveKit Server está rodando
-2. Execute o backend Python: `cd backend && python -m src.main`
-3. Execute o frontend React: `cd frontend && npm run dev`
-4. Abra o navegador em `http://localhost:5173`
-5. Clique em **"Iniciar Conversa"**
-6. Permita o acesso ao microfone
-7. Comece a falar com a GISA!
+1. **Inicie o backend**
+   ```bash
+   cd backend && python -m src.main
+   ```
+
+2. **Inicie o frontend Gradio**
+   ```bash
+   python app.py
+   ```
+
+3. **Abra o navegador** em `http://localhost:7860`
+
+4. **Clique em "Verificar Backend"** para confirmar que está conectado
+
+5. **Clique em "Iniciar Sessão"**
+
+6. **Grave um áudio** usando o microfone
+
+7. **Ouça a resposta** da GISA!
 
 ## 🎯 Fluxo da Conversa
 
@@ -209,36 +169,27 @@ Classificação em 14 cenários diferentes:
 - **Grupo C**: Registros de novas ocorrências
 - **Grupo D**: Casos especiais
 
-## 🛠️ Estrutura do Projeto
+## 🛠️ Estrutura do Projeto (100% Python!)
 
 ```
 energisa-demo/
+├── app.py                     # Frontend Gradio (Python!)
+├── requirements.txt           # Dependências Python
+├── pyproject.toml             # Poetry config
+├── .env.example               # Exemplo de configuração
 ├── backend/
 │   ├── src/
+│   │   ├── main.py            # FastAPI app
+│   │   ├── config.py          # Configurações
+│   │   ├── models.py          # Modelos Pydantic
 │   │   ├── agent/
-│   │   │   ├── gisa_prompt.py     # Prompt da GISA
-│   │   │   └── voice_agent.py     # Lógica do agente
-│   │   ├── services/
-│   │   │   ├── deepgram.py        # Integração Deepgram
-│   │   │   ├── elevenlabs.py      # Integração ElevenLabs
-│   │   │   └── gemini.py          # Integração Gemini
-│   │   ├── config.py              # Configurações
-│   │   ├── models.py              # Modelos Pydantic
-│   │   └── main.py                # FastAPI app
-│   ├── requirements.txt
-│   └── pyproject.toml
-├── frontend/
-│   ├── src/
-│   │   ├── App.tsx                # Componente principal
-│   │   ├── index.css              # Estilos
-│   │   └── main.tsx               # Entry point
-│   ├── index.html
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── vite.config.ts
-├── .env.example
-├── .gitignore
-├── livekit.yaml
+│   │   │   ├── gisa_prompt.py # Prompt da GISA
+│   │   │   └── voice_agent.py # Lógica do agente
+│   │   └── services/
+│   │       ├── deepgram.py    # STT
+│   │       ├── gemini.py      # LLM
+│   │       └── elevenlabs.py  # TTS
+│   └── requirements.txt
 └── README.md
 ```
 
@@ -289,33 +240,37 @@ Edite o arquivo `backend/src/agent/gisa_prompt.py` para customizar:
 - Frases padrão
 - Regras de negócio
 
-### Interface Visual
+### Interface Gradio
 
-Edite `frontend/src/index.css` para customizar:
-- Cores
-- Layout
-- Animações
-- Responsividade
+Edite `app.py` para customizar:
+- Layout da interface
+- Cores e tema
+- Componentes
+- Funcionalidades
 
 ## 🐛 Troubleshooting
 
-### Erro: "Failed to connect to LiveKit"
-- Verifique se o LiveKit Server está rodando
-- Confirme que a porta 7880 está acessível
-- Verifique as credenciais no `.env`
-
-### Erro: "Microphone access denied"
-- Permita acesso ao microfone no navegador
-- Use HTTPS ou localhost (HTTP só funciona em localhost)
+### Erro: "Backend offline"
+```bash
+# Inicie o backend primeiro
+cd backend
+python -m src.main
+```
 
 ### Erro: "API key invalid"
 - Verifique todas as chaves de API no `.env`
 - Confirme que as chaves estão ativas e com créditos
 
-### Audio não está sendo reproduzido
-- Verifique as permissões de áudio do navegador
+### Áudio não está sendo processado
+- Verifique as permissões de microfone no navegador
 - Teste com fones de ouvido
-- Verifique o volume do sistema
+- Verifique se o backend está rodando
+
+### ModuleNotFoundError
+```bash
+# Instale as dependências novamente
+pip install -r requirements.txt
+```
 
 ## 📊 Monitoramento
 
@@ -333,10 +288,11 @@ Logs disponíveis:
 - 🔊 Geração de áudio (TTS)
 - ❌ Erros e warnings
 
-### Logs do Frontend
-Abra o DevTools do navegador (F12) e veja:
-- Console: Logs de conexão e eventos
-- Network: Requisições HTTP e WebSocket
+### Interface Gradio
+Acesse http://localhost:7860 e veja:
+- Status da conexão
+- Histórico de conversas
+- Indicadores visuais de processamento
 
 ## 🚀 Deploy em Produção
 
@@ -348,25 +304,57 @@ uvicorn src.main:app --host 0.0.0.0 --port 3000
 
 Ou com Gunicorn:
 ```bash
-cd backend
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main:app
 ```
 
-### Frontend
+### Frontend Gradio
 ```bash
-cd frontend
-npm run build
+python app.py
 ```
 
-Os arquivos de produção estarão em `frontend/dist/`.
+Para deploy em servidor:
+```bash
+python app.py --server-name 0.0.0.0 --server-port 7860
+```
 
 ### Recomendações
 - Use HTTPS em produção
-- Configure CORS adequadamente
-- Use variáveis de ambiente seguras
-- Configure rate limiting
-- Implemente logging estruturado
-- Use um processo manager (PM2, systemd)
+- Configure variáveis de ambiente seguras
+- Use um processo manager (systemd, supervisor)
+- Configure firewall adequadamente
+- Implemente rate limiting
+- Use logs estruturados
+
+## 🎯 Vantagens da Versão 100% Python
+
+### ✅ Por que Python para TUDO?
+
+1. **Desenvolvimento Unificado**
+   - Uma única linguagem
+   - Mesmo ambiente de desenvolvimento
+   - Compartilhamento de código entre backend e frontend
+
+2. **SDKs Superiores**
+   - Deepgram, Gemini, ElevenLabs têm SDKs Python melhores
+   - Mais documentação e exemplos
+   - Comunidade mais ativa em AI/ML
+
+3. **Gradio > React para AI**
+   - Interface específica para AI/ML
+   - Componentes de áudio nativos
+   - Deploy mais simples
+   - Zero JavaScript/TypeScript
+
+4. **Manutenção Simplificada**
+   - Menos dependências
+   - Um package manager (pip/poetry)
+   - Debugging mais fácil
+   - Stack homogênea
+
+5. **Prototipagem Rápida**
+   - Gradio permite iteração rápida
+   - Interface bonita automática
+   - Menos código boilerplate
 
 ## 📝 Licença
 
@@ -377,11 +365,18 @@ Este projeto é privado e proprietário da Energisa.
 Para dúvidas ou problemas:
 1. Verifique a seção de Troubleshooting
 2. Consulte a documentação das APIs:
-   - LiveKit: https://docs.livekit.io/
+   - Gradio: https://www.gradio.app/docs/
+   - FastAPI: https://fastapi.tiangolo.com/
    - Deepgram: https://developers.deepgram.com/
    - Google AI: https://ai.google.dev/
    - ElevenLabs: https://elevenlabs.io/docs/
 
 ---
 
-Desenvolvido com ❤️ para a Energisa
+## 🐍 100% Python
+
+Backend: **Python + FastAPI**
+Frontend: **Python + Gradio**
+AI Services: **Deepgram + Gemini + ElevenLabs**
+
+**Desenvolvido com ❤️ para a Energisa**

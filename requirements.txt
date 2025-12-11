@@ -1,0 +1,29 @@
+# GISA Voice Agent - 100% Python
+
+# Backend (FastAPI)
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+python-dotenv==1.0.0
+
+# LiveKit
+livekit==0.11.0
+livekit-api==0.6.0
+
+# AI Services
+deepgram-sdk==3.4.0
+google-generativeai==0.3.2
+elevenlabs==0.2.27
+
+# Utilities
+aiohttp==3.9.1
+websockets==12.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Frontend (Gradio)
+gradio==4.16.0
+
+# Audio Processing
+numpy==1.26.3
+soundfile==0.12.1
